@@ -1,23 +1,90 @@
 ﻿@inherits LayoutComponentBase
 
-<div class="page">
-    <div class="sidebar">
-        <NavMenu />
-    </div>
+<div class="layout-container">
+	<header class="top-bar">
+		<img class="logo" src="logo.png" alt="Logo" />
+		<h1 class="site-title">SustainaHome</h1>
+		<button class="settings-btn">⚙️</button>
+	</header>
 
-    <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
-        <article class="content px-4">
-            @Body
-        </article>
-    </main>
+	<main class="main-content">
+		@Body
+	</main>
 </div>
 
 <div id="blazor-error-ui">
-    An unhandled error has occurred.
-    <a href="" class="reload">Reload</a>
-    <a class="dismiss">🗙</a>
+	An unhandled error has occurred.
+	<a href="" class="reload">Reload</a>
+	<a class="dismiss">🗙</a>
 </div>
+
+<style>
+	/* Reset margin and padding */
+	html, body {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+	}
+
+	.layout-container {
+		display: flex;
+		flex-direction: column;
+		min-height: 100vh;
+		background-color: #e0f7e9;
+		font-family: Arial, sans-serif;
+	}
+
+	.top-bar {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		background-color: #1e3a5f;
+		padding: 10px 20px;
+		color: #add8e6;
+	}
+
+	.logo {
+		height: 40px;
+	}
+
+	.site-title {
+		font-size: 1.8rem;
+		font-weight: bold;
+		margin: 0;
+		color: #add8e6;
+		flex-grow: 1;
+		text-align: center;
+	}
+
+	.settings-btn {
+		font-size: 1.5rem;
+		background-color: transparent;
+		border: none;
+		color: #add8e6;
+		cursor: pointer;
+	}
+
+	.main-content {
+		flex: 1;
+		padding: 20px;
+	}
+
+	#blazor-error-ui {
+		background: lightyellow;
+		bottom: 0;
+		box-shadow: 0 -1px 2px rgba(0, 0, 0, 0.2);
+		display: none;
+		left: 0;
+		padding: 0.6rem 1.25rem 0.7rem 1.25rem;
+		position: fixed;
+		width: 100%;
+		z-index: 1000;
+	}
+
+	#blazor-error-ui .dismiss {
+		cursor: pointer;
+		position: absolute;
+		right: 0.75rem;
+		top: 0.5rem;
+	}
+</style>

@@ -2,6 +2,89 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="home-container">
+	<div class="energy-usage">
+		<h2>Weekly Energy Usage (kWh)</h2>
+		<input type="number" class="usage-input" @bind="currentEnergyUsage" />
+	</div>
 
-Welcome to your new app.
+	<div class="button-group">
+		<button class="energy-usage-btn" @onclick="NavigateToEnergyUsage">Energy Usage</button>
+		<button class="manage-goal-btn" @onclick="NavigateToManageGoal">Manage Energy Goal</button>
+		<button class="smart-devices-btn" @onclick="NavigateToSmartDevices">Smart Devices</button>
+	</div>
+</div>
+
+<style>
+	.home-container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: space-evenly;
+		height: 80vh;
+	}
+
+	.energy-usage h2 {
+		font-size: 1.5rem;
+		margin-bottom: 10px;
+	}
+
+	.usage-input {
+		font-size: 1.5rem;
+		padding: 10px;
+		width: 200px;
+		text-align: center;
+		border: 2px solid #1e3a5f;
+		border-radius: 8px;
+	}
+
+	.button-group {
+		display: flex;
+		gap: 1rem;
+		margin-top: 40px;
+		width: 100%;
+		justify-content: center;
+	}
+
+		.button-group button {
+			padding: 20px;
+			font-size: 1.2rem;
+			border: none;
+			border-radius: 10px;
+			width: 200px;
+			cursor: pointer;
+			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+		}
+
+	.energy-usage-btn {
+		background-color: #f3e6f6;
+	}
+
+	.manage-goal-btn {
+		background-color: #a8d5a2;
+	}
+
+	.smart-devices-btn {
+		background-color: #ffd59e;
+	}
+
+	.button-group button:hover {
+		opacity: 0.9;
+	}
+</style>
+
+@code {
+	private int currentEnergyUsage = 150;
+
+	private void NavigateToEnergyUsage()
+	{
+	}
+
+	private void NavigateToManageGoal()
+	{
+	}
+
+	private void NavigateToSmartDevices()
+	{
+	}
+}
