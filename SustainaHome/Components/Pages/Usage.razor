@@ -204,7 +204,7 @@
 
     string WeeklyMessage =>
         WeeklyUsage.Last() > WeeklyUsage.Take(WeeklyUsage.Count - 1).Max()
-            ? "Congrats, last week was a new record!"
+            ? "Last week was low, you can do better!"
             : WeeklyUsage.Last() >= 75
                 ? "Last week was good!"
                 : "Last week was low, you can do better!";
