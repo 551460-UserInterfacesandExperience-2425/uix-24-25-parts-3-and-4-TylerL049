@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager NavManager
 
 <PageTitle>Home</PageTitle>
 
@@ -10,9 +11,9 @@
     </div>
 
     <div class="button-group">
-        <button class="energy-usage-btn" @onclick="NavigateToEnergyUsage">Energy Usage</button>
-        <button class="manage-goal-btn" @onclick="NavigateToManageGoal">Manage Energy Goal</button>
-        <button class="smart-devices-btn" @onclick="NavigateToSmartDevices">Smart Devices</button>
+        <button type="button" class="energy-usage-btn" @onclick="NavigateToEnergyUsage">Energy Usage</button>
+        <button type="button" class="manage-goal-btn" @onclick="NavigateToManageGoal">Manage Energy Goal</button>
+        <button type="button" class="smart-devices-btn" @onclick="NavigateToSmartDevices">Smart Devices</button>
     </div>
 </div>
 
@@ -95,13 +96,17 @@
 
     private void NavigateToEnergyUsage()
     {
+        Console.WriteLine("Navigating to Energy Usage page");
+        NavManager.NavigateTo("/usage");
     }
 
     private void NavigateToManageGoal()
     {
+        // Your navigation logic to Energy Goal page
     }
 
     private void NavigateToSmartDevices()
     {
+        // Your navigation logic to Smart Devices page
     }
 }
