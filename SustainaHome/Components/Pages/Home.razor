@@ -3,88 +3,105 @@
 <PageTitle>Home</PageTitle>
 
 <div class="home-container">
-	<div class="energy-usage">
-		<h2>Weekly Energy Usage (kWh)</h2>
-		<input type="number" class="usage-input" @bind="currentEnergyUsage" />
-	</div>
+    <div class="energy-usage">
+        <div class="energy-usage-box">
+            <span class="energy-usage-number">@EnergyUsage kWh</span>
+        </div>
+    </div>
 
-	<div class="button-group">
-		<button class="energy-usage-btn" @onclick="NavigateToEnergyUsage">Energy Usage</button>
-		<button class="manage-goal-btn" @onclick="NavigateToManageGoal">Manage Energy Goal</button>
-		<button class="smart-devices-btn" @onclick="NavigateToSmartDevices">Smart Devices</button>
-	</div>
+    <div class="button-group">
+        <button class="energy-usage-btn" @onclick="NavigateToEnergyUsage">Energy Usage</button>
+        <button class="manage-goal-btn" @onclick="NavigateToManageGoal">Manage Energy Goal</button>
+        <button class="smart-devices-btn" @onclick="NavigateToSmartDevices">Smart Devices</button>
+    </div>
 </div>
 
 <style>
-	.home-container {
-		display: flex;
-		flex-direction: column;
-		align-items: center;
-		justify-content: space-evenly;
-		height: 80vh;
-	}
+    .home-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        padding: 20px;
+        height: 100vh;
+    }
 
-	.energy-usage h2 {
-		font-size: 1.5rem;
-		margin-bottom: 10px;
-	}
+    .energy-usage {
+        margin-top: 40px;
+    }
 
-	.usage-input {
-		font-size: 1.5rem;
-		padding: 10px;
-		width: 200px;
-		text-align: center;
-		border: 2px solid #1e3a5f;
-		border-radius: 8px;
-	}
+    .energy-usage-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+        border: 3px solid #1e3a5f;
+        border-radius: 10px;
+        background-color: #f0f9ff;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        margin-bottom: 40px;
+    }
 
-	.button-group {
-		display: flex;
-		gap: 1rem;
-		margin-top: 40px;
-		width: 100%;
-		justify-content: center;
-	}
+    .energy-usage-number {
+        font-size: 7rem;
+        color: #1e3a5f;
+        font-weight: bold;
+    }
 
-		.button-group button {
-			padding: 20px;
-			font-size: 1.2rem;
-			border: none;
-			border-radius: 10px;
-			width: 200px;
-			cursor: pointer;
-			box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-		}
+    .button-group {
+        display: flex;
+        gap: 2rem;
+        margin-top: 60px;
+        width: 100%;
+        justify-content: space-evenly;
+    }
 
-	.energy-usage-btn {
-		background-color: #f3e6f6;
-	}
+    .button-group button {
+        padding: 50px;
+        font-size: 1.5rem;
+        border: none;
+        border-radius: 10px;
+        width: 30%;
+        cursor: pointer;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        transition: background-color 0.3s;
+        height: 300px;
+    }
 
-	.manage-goal-btn {
-		background-color: #a8d5a2;
-	}
+    .energy-usage-btn {
+        background-color: #f3e6f6;
+    }
 
-	.smart-devices-btn {
-		background-color: #ffd59e;
-	}
+    .manage-goal-btn {
+        background-color: #a8d5a2;
+    }
 
-	.button-group button:hover {
-		opacity: 0.9;
-	}
+    .smart-devices-btn {
+        background-color: #ffd59e;
+    }
+
+    .button-group button:hover {
+        opacity: 0.9;
+    }
+
+    .button-group button:focus {
+        outline: none;
+    }
+
 </style>
 
 @code {
-	private int currentEnergyUsage = 150;
+    private double EnergyUsage = 150.0;
 
-	private void NavigateToEnergyUsage()
-	{
-	}
+    private void NavigateToEnergyUsage()
+    {
+    }
 
-	private void NavigateToManageGoal()
-	{
-	}
+    private void NavigateToManageGoal()
+    {
+    }
 
-	private void NavigateToSmartDevices()
-	{
-	}
+    private void NavigateToSmartDevices()
+    {
+    }
 }
