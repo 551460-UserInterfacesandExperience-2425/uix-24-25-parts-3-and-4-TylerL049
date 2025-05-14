@@ -1,0 +1,172 @@
+@page "/daily"
+@rendermode InteractiveServer
+@inject NavigationManager NavManager
+
+<PageTitle>Daily Usage</PageTitle>
+
+<div class="daily-container">
+    <div class="left-panel">
+        <div class="spacer" style="height:@($"{ChartHeight / 2 - 20}px")"></div>
+        <button class="return-button" @onclick="NavigateBack">Return</button>
+    </div>
+
+    <div class="main-panel">
+        <div class="chart-title">Daily Energy Usage</div>
+        <div class="bar-chart" style="height:@($"{ChartHeight}px")">
+            @for (int i = 0; i < DailyUsage.Count; i++)
+            {
+                var height = (DailyUsage[i] - MinUsage) * (double)ChartHeight / (MaxUsage - MinUsage);
+                <div class="bar-container">
+                    <div class="bar" style="height:@($"{height}px")"></div>
+                    <span class="bar-label">@DayNames[i]</span>
+                </div>
+            }
+        </div>
+
+        <table class="usage-table">
+            <thead>
+                <tr>
+                    <th>Day</th>
+                    <th>Usage (kWh)</th>
+                    <th>Overview</th>
+                    <th>Goal Remaining (kWh)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    double runningGoal = WeeklyGoal;
+                    for (int i = 0; i < DailyUsage.Count; i++)
+                    {
+                        runningGoal -= DailyUsage[i];
+                    <tr>
+                        <td>@DayNames[i]</td>
+                        <td>@DailyUsage[i]</td>
+                        <td>@GetOverview(DailyUsage[i])</td>
+                        <td>@runningGoal.ToString("0.0")</td>
+                    </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<style>
+    .daily-container {
+        display: flex;
+        flex-direction: row;
+        padding: 40px;
+        gap: 30px;
+    }
+
+    .left-panel {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 100px;
+    }
+
+    .return-button {
+        padding: 10px 20px;
+        font-size: 1rem;
+        background-color: #1e3a5f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .return-button:hover {
+        opacity: 0.9;
+    }
+
+    .main-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .chart-title {
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+    }
+
+    .bar-chart {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+        max-width: 600px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+    .bar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        flex: 1;
+        margin: 0 5px;
+    }
+
+    .bar {
+        width: 20px;
+        background-color: #4a90e2;
+        transition: height 0.3s ease-in-out;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .bar-label {
+        margin-top: 8px;
+        font-size: 0.8rem;
+    }
+
+    .usage-table {
+        width: 100%;
+        max-width: 1000px;
+        border-collapse: collapse;
+        margin-top: 10px;
+        font-size: 1.1rem;
+    }
+
+    .usage-table th,
+    .usage-table td {
+        border: 1px solid #ccc;
+        padding: 16px 20px;
+        text-align: center;
+    }
+
+    .goal-section {
+        margin-top: 30px;
+        font-size: 1.2rem;
+        color: #2e7d32;
+    }
+</style>
+
+@code {
+    List<string> DayNames = new() { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun" };
+    List<double> DailyUsage = new() { 6.4, 7.2, 5.8, 8.5, 7.0, 6.9, 7.3 };
+    int MinUsage = 4;
+    int MaxUsage = 10;
+    int ChartHeight = 300;
+    double WeeklyGoal = 60;
+
+    double RemainingGoal => WeeklyGoal - DailyUsage.Sum();
+
+    string GetOverview(double usage)
+    {
+        if (usage < 7)
+            return "Low";
+        else if (usage <= 8)
+            return "High";
+        else
+            return "Very High";
+    }
+
+    void NavigateBack() => NavManager.NavigateTo("/usage");
+}

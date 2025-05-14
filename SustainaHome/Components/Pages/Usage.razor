@@ -1,5 +1,218 @@
 @page "/usage"
+@rendermode InteractiveServer
+@inject NavigationManager NavManager
 
 <PageTitle>Usage Page</PageTitle>
 
-<h3>Welcome to the Razor Page!</h3>
+<div class="usage-container">
+    <div class="left-panel">
+        <div class="chart-wrapper">
+            <div class="chart-scale">
+                @for (int i = MaxUsage; i >= MinUsage; i -= 10)
+                {
+                    <div class="scale-label">@i</div>
+                }
+            </div>
+            <!-- Set the height of the chart container to a more reasonable value -->
+            <div class="bar-chart" style="height:@($"{ChartHeight + 40}px")">
+                @for (int i = 0; i < WeeklyUsage.Count; i++)
+                {
+                    // Normalizing the height based on the MinUsage and MaxUsage range
+                    var height = (WeeklyUsage[i] - MinUsage) * (double)ChartHeight / (MaxUsage - MinUsage);
+                    <div class="bar-container">
+                        <div class="bar" style="height:@($"{height}px")"></div>
+                        <span class="bar-label">Week @(i + 1)</span>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <div class="message-box">
+            <p>@WeeklyMessage</p>
+        </div>
+
+        <div class="bottom-row">
+            <button class="return-button" @onclick="NavigateHome">Return</button>
+        </div>
+    </div>
+
+    <div class="right-panel">
+        <table class="usage-table">
+            <thead>
+                <tr>
+                    <th>Week</th>
+                    <th>Usage (kWh)</th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < WeeklyUsage.Count; i++)
+                {
+                    <tr @onclick="() => NavigateToWeek(i + 1)">
+                        <td>Week @(i + 1)</td>
+                        <td>@WeeklyUsage[i]</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        <!-- Tip at the bottom-center -->
+        <div class="tip-text">
+            <span>@EnergyTip</span>
+        </div>
+    </div>
+</div>
+
+<style>
+    .usage-container {
+        display: flex;
+        padding: 20px;
+        height: 100vh;
+        box-sizing: border-box;
+    }
+
+    .left-panel {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding-right: 20px;
+    }
+
+    .chart-wrapper {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-end;
+    }
+
+    .chart-scale {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 400px;
+        margin-right: 10px;
+        font-size: 0.8rem;
+        color: #666;
+    }
+
+    .scale-label {
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        padding-right: 5px;
+    }
+
+    .bar-chart {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        width: 100%;
+        max-width: 500px; /* Increased width for the graph */
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        margin-top: 20px;
+    }
+
+    .bar-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .bar {
+        width: 20px;
+        background-color: #4a90e2;
+        transition: height 0.3s ease-in-out;
+        border-radius: 5px 5px 0 0;
+    }
+
+    .bar-label {
+        margin-top: 8px;
+        font-size: 0.8rem;
+    }
+
+    .message-box {
+        margin-top: 30px;
+        font-size: 1rem;
+        font-weight: 500;
+        color: #2e7d32;
+    }
+
+    .bottom-row {
+        display: flex;
+        align-items: center;
+        margin-top: 30px; /* Reduced margin to bring the button up */
+        gap: 20px;
+    }
+
+    .return-button {
+        padding: 12px 20px;
+        font-size: 1.2rem;
+        background-color: #1e3a5f;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px; /* Reduced space above the button */
+    }
+
+    .return-button:hover {
+        opacity: 0.9;
+    }
+
+    .right-panel {
+        flex: 1;
+        padding-left: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .usage-table {
+        width: 80%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        font-size: 1.1rem;
+    }
+
+    .usage-table th,
+    .usage-table td {
+        border: 1px solid #ccc;
+        padding: 15px;
+        text-align: center;
+    }
+
+    .usage-table tr:hover {
+        background-color: #f0f0f0;
+        cursor: pointer;
+    }
+
+    .tip-text {
+        font-size: 1.2rem;
+        color: #444;
+        position: absolute;
+        bottom: 30px;
+        text-align: center;
+        width: 100%;
+    }
+</style>
+
+@code {
+    List<int> WeeklyUsage = new() { 50, 70, 65, 80, 75, 60, 85 };
+    int MaxUsage = 100;
+    int MinUsage = 30;
+    int ChartHeight = 400; // Adjusted height for the graph
+
+    string WeeklyMessage =>
+        WeeklyUsage.Last() > WeeklyUsage.Take(WeeklyUsage.Count - 1).Max()
+            ? "Congrats, last week was a new record!"
+            : WeeklyUsage.Last() >= 75
+                ? "Last week was good!"
+                : "Last week was low, you can do better!";
+
+    string EnergyTip = "Don't forget to unplug devices in standby.";
+
+    void NavigateHome() => NavManager.NavigateTo("/");
+    void NavigateToWeek(int week) => NavManager.NavigateTo("/daily");
+}
