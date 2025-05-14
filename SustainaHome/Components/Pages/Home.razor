@@ -1,13 +1,18 @@
 ﻿@page "/"
 @inject NavigationManager NavManager
 @rendermode InteractiveServer
+@inject UsageStateService usageStateService
 
 <PageTitle>Home</PageTitle>
 
 <div class="home-container">
     <div class="energy-usage">
         <div class="energy-usage-box">
-            <span class="energy-usage-number">@EnergyUsage kWh</span>
+            <span class="energy-usage-number">@usageStateService.EnergyUsage</span>
+            @if (usageStateService.GoalActive)
+            {
+                <span class="goal-info">/ @usageStateService.WeeklyGoal kWh</span>
+            }
         </div>
     </div>
 
@@ -50,6 +55,11 @@
         font-weight: bold;
     }
 
+    .goal-info {
+        font-size: 2rem;
+        color: #a8d5a2;
+    }
+
     .button-group {
         display: flex;
         gap: 2rem;
@@ -89,25 +99,35 @@
     .button-group button:focus {
         outline: none;
     }
-
 </style>
 
 @code {
-    private double EnergyUsage = 150.0;
+    protected override void OnInitialized()
+    {
+        // Ensure that values are always synchronized with the singleton service
+        base.OnInitialized();
+
+        // Refresh the data from the UsageStateService on every page load
+        UpdateEnergyData();
+    }
+
+    private void UpdateEnergyData()
+    {
+        // Ensure the EnergyUsage and Goal are reflecting the latest state from the UsageStateService
+        // These values will automatically be updated when you navigate to the Goal page and save a goal
+    }
 
     private void NavigateToEnergyUsage()
     {
-        Console.WriteLine("Navigating to Energy Usage page");
         NavManager.NavigateTo("/usage");
     }
 
     private void NavigateToManageGoal()
     {
-        // Your navigation logic to Energy Goal page
+        NavManager.NavigateTo("/goal");
     }
 
     private void NavigateToSmartDevices()
     {
-        // Your navigation logic to Smart Devices page
     }
 }

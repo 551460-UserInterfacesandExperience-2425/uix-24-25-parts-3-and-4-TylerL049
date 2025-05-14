@@ -7,7 +7,7 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.WebHost.UseStaticWebAssets();
 
-
+builder.Services.AddSingleton<UsageStateService>();
 
 var app = builder.Build();
 

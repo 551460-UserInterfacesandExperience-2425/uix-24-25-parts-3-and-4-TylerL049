@@ -1,6 +1,7 @@
 @page "/usage"
 @rendermode InteractiveServer
 @inject NavigationManager NavManager
+@inject UsageStateService usageStateService
 
 <PageTitle>Usage Page</PageTitle>
 
@@ -13,11 +14,9 @@
                     <div class="scale-label">@i</div>
                 }
             </div>
-            <!-- Set the height of the chart container to a more reasonable value -->
             <div class="bar-chart" style="height:@($"{ChartHeight + 40}px")">
                 @for (int i = 0; i < WeeklyUsage.Count; i++)
                 {
-                    // Normalizing the height based on the MinUsage and MaxUsage range
                     var height = (WeeklyUsage[i] - MinUsage) * (double)ChartHeight / (MaxUsage - MinUsage);
                     <div class="bar-container">
                         <div class="bar" style="height:@($"{height}px")"></div>
@@ -55,7 +54,6 @@
             </tbody>
         </table>
 
-        <!-- Tip at the bottom-center -->
         <div class="tip-text">
             <span>@EnergyTip</span>
         </div>
@@ -106,7 +104,7 @@
         justify-content: space-between;
         align-items: flex-end;
         width: 100%;
-        max-width: 500px; /* Increased width for the graph */
+        max-width: 500px;
         background-color: #f5f5f5;
         border: 1px solid #ccc;
         border-radius: 10px;
@@ -142,7 +140,7 @@
     .bottom-row {
         display: flex;
         align-items: center;
-        margin-top: 30px; /* Reduced margin to bring the button up */
+        margin-top: 30px;
         gap: 20px;
     }
 
@@ -154,7 +152,7 @@
         border: none;
         border-radius: 5px;
         cursor: pointer;
-        margin-top: 20px; /* Reduced space above the button */
+        margin-top: 20px;
     }
 
     .return-button:hover {
@@ -199,10 +197,10 @@
 </style>
 
 @code {
-    List<int> WeeklyUsage = new() { 50, 70, 65, 80, 75, 60, 85 };
+    List<int> WeeklyUsage => usageStateService.WeeklyUsage;
     int MaxUsage = 100;
     int MinUsage = 30;
-    int ChartHeight = 400; // Adjusted height for the graph
+    int ChartHeight = 400;
 
     string WeeklyMessage =>
         WeeklyUsage.Last() > WeeklyUsage.Take(WeeklyUsage.Count - 1).Max()
@@ -215,4 +213,9 @@
 
     void NavigateHome() => NavManager.NavigateTo("/");
     void NavigateToWeek(int week) => NavManager.NavigateTo("/daily");
+
+    void UpdateUsage(int week, int newUsage)
+    {
+        usageStateService.WeeklyUsage[week - 1] = newUsage;
+    }
 }
